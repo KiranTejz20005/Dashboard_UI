@@ -1,0 +1,15 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>
+  <defs>
+    <linearGradient id='skinClara' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0%' stop-color='#FFD4AA'/>
+      <stop offset='100%' stop-color='#FFBB80'/>
+    </linearGradient>
+    <linearGradient id='bgClara' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='#E4F8FF'/>
+      <stop offset='100%' stop-color='#CDEEFF'/>
+    </linearGradient>
+  </defs>
+  <rect width='64' height='64' rx='14' fill='url(#bgClara)'/>
+  <circle cx='32' cy='26' r='14' fill='url(#skinClara)' stroke='#2A82A3' stroke-width='2'/>
+  <path d='M18 52c2-10 12-14 14-14s12 4 14 14H18Z' fill='#2A82A3' fill-opacity='0.12'/>
+</svg>

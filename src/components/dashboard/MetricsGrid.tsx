@@ -6,11 +6,12 @@ const metrics = [
   {
     title: "Bookings",
     value: "240",
-    change: "+9.7%",
+    change: "+9.97%",
     trend: "up",
     period: "vs last month",
     icon: Calendar,
     gradient: true,
+    accent: "from-[#FF7A18] via-[#FF8E1A] to-[#FFB347]",
   },
   {
     title: "Revenue",
@@ -20,6 +21,7 @@ const metrics = [
     period: "vs last month",
     icon: DollarSign,
     gradient: false,
+    accent: "from-[#FF7A18] via-[#FF8E1A] to-[#FFB347]",
   },
   {
     title: "Avg Booking Value",
@@ -29,6 +31,7 @@ const metrics = [
     period: "vs last month",
     icon: Receipt,
     gradient: false,
+    accent: "from-[#FF7A18] via-[#FF8E1A] to-[#FFB347]",
   },
   {
     title: "No Show Rate",
@@ -38,6 +41,7 @@ const metrics = [
     period: "vs last month",
     icon: XCircle,
     gradient: false,
+    accent: "from-[#FF7A18] via-[#FF8E1A] to-[#FFB347]",
   },
 ];
 
@@ -53,45 +57,43 @@ export function MetricsGrid() {
         return (
           <Card
             key={metric.title}
-            className={
-              shouldShowGradient
-                ? "bg-gradient-to-br from-primary via-primary to-orange-500 text-primary-foreground border-0 shadow-lg transition-all duration-300 animate-fade-in hover:scale-105 hover:shadow-xl"
-                : "bg-card border border-border shadow-sm transition-all duration-300 animate-fade-in hover:shadow-lg"
-            }
+            className={shouldShowGradient
+              ? `relative overflow-hidden bg-gradient-to-br ${metric.accent ?? 'from-primary via-primary to-orange-500'} text-white border-0 shadow-lg transition-all duration-300 animate-fade-in hover:scale-[1.02] hover:shadow-xl`
+              : "bg-card border border-border shadow-sm transition-all duration-300 animate-fade-in hover:shadow-lg"}
             onMouseEnter={() => setHoveredCard(metric.title)}
             onMouseLeave={() => setHoveredCard(null)}
           >
             <div className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <metric.icon 
-                  className={
-                    shouldShowGradient 
-                      ? "w-8 h-8 transition-transform duration-300" 
-                      : "w-8 h-8 text-primary transition-all duration-300"
-                  } 
-                  style={{
-                    transform: isHovered ? 'rotate(10deg) scale(1.1)' : 'rotate(0deg) scale(1)'
-                  }}
-                />
+              {shouldShowGradient && (
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute right-0 top-0 w-24 h-24 opacity-15" style={{background:"radial-gradient(circle at top right, rgba(255,255,255,0.4), transparent 60%)"}} />
+                  <svg className="absolute right-3 top-3 w-14 h-14 opacity-10" viewBox="0 0 64 64" fill="none">
+                    <path d="M8 8L56 8L32 56Z" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              )}
+              {/* Unified top row: icon in circular badge + title */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className={shouldShowGradient ? "w-11 h-11 rounded-full bg-white/15 backdrop-blur flex items-center justify-center" : "w-11 h-11 rounded-full bg-muted flex items-center justify-center"}>
+                  <metric.icon 
+                    className={shouldShowGradient ? "w-6 h-6 text-white" : "w-6 h-6 text-primary"} 
+                  />
+                </div>
+                <h4 className={shouldShowGradient ? "text-base font-semibold tracking-tight" : "text-base font-semibold text-foreground"}>{metric.title}</h4>
               </div>
-              <div className={shouldShowGradient ? "text-sm font-medium opacity-90 mb-2" : "text-sm font-medium text-muted-foreground mb-2"}>
-                {metric.title}
-              </div>
-              <div className={shouldShowGradient ? "text-5xl font-bold mb-2" : "text-4xl font-bold text-foreground mb-2"}>
+              <div className={shouldShowGradient ? "text-5xl font-bold mb-3 leading-none drop-shadow-sm" : "text-4xl font-bold text-foreground mb-3"}>
                 {metric.value}
               </div>
-              <div className="flex items-center gap-1 text-xs">
-                {metric.trend === "up" ? (
-                  <TrendingUp className="w-3 h-3" />
-                ) : (
-                  <TrendingDown className="w-3 h-3" />
-                )}
-                <span className={shouldShowGradient ? "" : metric.trend === "up" ? "text-success" : "text-destructive"}>
-                  {metric.change}
-                </span>
-                <span className={shouldShowGradient ? "opacity-90" : "text-muted-foreground"}>
-                  {metric.period}
-                </span>
+              <div className="flex items-center gap-2 text-xs mt-1">
+                <div className={shouldShowGradient ? "flex items-center gap-1 px-2 py-1 rounded-full bg-white shadow-sm" : "flex items-center gap-1 px-2 py-1 rounded-full bg-muted"}>
+                  {metric.trend === "up" ? (
+                    <TrendingUp className={shouldShowGradient ? "w-3 h-3 text-[#FF7A18]" : "w-3 h-3 text-success"} />
+                  ) : (
+                    <TrendingDown className={shouldShowGradient ? "w-3 h-3 text-[#FF7A18]" : "w-3 h-3 text-destructive"} />
+                  )}
+                  <span className={shouldShowGradient ? "font-semibold text-[#FF7A18]" : metric.trend === "up" ? "text-success" : "text-destructive"}>{metric.change}</span>
+                </div>
+                <span className={shouldShowGradient ? "opacity-90" : "text-muted-foreground"}>{metric.period}</span>
               </div>
             </div>
           </Card>

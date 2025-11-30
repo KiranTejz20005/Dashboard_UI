@@ -132,7 +132,7 @@ export function BookingInsights() {
           <h3 className="text-lg font-semibold text-foreground">Booking Insights</h3>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="text-sm hover:bg-primary hover:text-primary-foreground transition-colors">
+              <Button variant="outline" size="sm" className="btn-white-gradient font-medium rounded-full shadow-sm">
                 {selectedMonth}
                 <ChevronDown className="w-4 h-4 ml-2" />
               </Button>
@@ -142,8 +142,8 @@ export function BookingInsights() {
                 <DropdownMenuItem
                   key={month}
                   onClick={() => setSelectedMonth(month)}
-                  className={`cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors ${
-                    selectedMonth === month ? "bg-primary/10" : ""
+                  className={`item-white-gradient cursor-pointer rounded-md text-sm font-medium ${
+                    selectedMonth === month ? 'ring-1 ring-[#FF8E1A]' : ''
                   }`}
                 >
                   {month}

@@ -1,0 +1,15 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>
+  <defs>
+    <linearGradient id='skinSophie' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0%' stop-color='#FFCFA5'/>
+      <stop offset='100%' stop-color='#FFB57A'/>
+    </linearGradient>
+    <linearGradient id='bgSophie' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='#F9E9FF'/>
+      <stop offset='100%' stop-color='#EBD3FF'/>
+    </linearGradient>
+  </defs>
+  <rect width='64' height='64' rx='14' fill='url(#bgSophie)'/>
+  <circle cx='32' cy='26' r='14' fill='url(#skinSophie)' stroke='#9E5AD9' stroke-width='2'/>
+  <path d='M18 52c2-10 12-14 14-14s12 4 14 14H18Z' fill='#9E5AD9' fill-opacity='0.12'/>
+</svg>

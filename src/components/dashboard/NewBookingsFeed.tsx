@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -10,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { normalizeRange } from "@/lib/date";
+import { format } from "date-fns";
 
 const allBookings = [
   {
@@ -21,6 +23,7 @@ const allBookings = [
     time: "8:00 – 10:00 AM",
     status: "New",
     statusColor: "info",
+    avatar: "/avatars/human-ayra.svg",
   },
   {
     artist: "Luca Moretti",
@@ -31,6 +34,7 @@ const allBookings = [
     time: "8:00 PM – 4:00 PM",
     status: "Deposit",
     statusColor: "warning",
+    avatar: "/avatars/human-luca.svg",
   },
   {
     artist: "Ethan",
@@ -41,6 +45,7 @@ const allBookings = [
     time: "10:00 AM – 2:00 PM",
     status: "Deposit",
     statusColor: "warning",
+    avatar: "/avatars/human-ethan.svg",
   },
   {
     artist: "Sophie Langley",
@@ -51,6 +56,7 @@ const allBookings = [
     time: "10:00 AM – 1:30 AM",
     status: "Check-in",
     statusColor: "purple",
+    avatar: "/avatars/human-sophie.svg",
   },
   {
     artist: "Clara Jensen",
@@ -61,6 +67,7 @@ const allBookings = [
     time: "2:00 – 4:00 PM",
     status: "Upcoming",
     statusColor: "teal",
+    avatar: "/avatars/human-clara.svg",
   },
   {
     artist: "Ayra Voss",
@@ -71,6 +78,7 @@ const allBookings = [
     time: "3:00 – 5:00 PM",
     status: "Repeat",
     statusColor: "success",
+    avatar: "/avatars/human-ayra.svg",
   },
   {
     artist: "Clara Jensen",
@@ -81,6 +89,7 @@ const allBookings = [
     time: "1:00 – 3:00 PM",
     status: "New",
     statusColor: "info",
+    avatar: "/avatars/human-clara.svg",
   },
   {
     artist: "Sophie Langley",
@@ -91,6 +100,7 @@ const allBookings = [
     time: "9:00 AM – 12:00 PM",
     status: "Cancelled",
     statusColor: "muted",
+    avatar: "/avatars/human-sophie.svg",
   },
 ];
 
@@ -114,14 +124,16 @@ export function NewBookingsFeed() {
     ? allBookings 
     : allBookings.filter(b => b.status === selectedStatus);
 
+  // Date display simplified: removed mode toggle (short/full/relative)
+
   return (
     <Card className="bg-card border border-border shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-in">
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">New Bookings Feed</h3>
+          <h3 className="text-lg font-bold text-foreground tracking-tight">New Bookings Feed</h3>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors">
+              <Button variant="outline" size="sm" className="btn-white-gradient text-xs font-medium rounded-full shadow-sm">
                 {selectedStatus}
                 <ChevronDown className="w-3 h-3 ml-2" />
               </Button>
@@ -131,8 +143,8 @@ export function NewBookingsFeed() {
                 <DropdownMenuItem
                   key={status}
                   onClick={() => setSelectedStatus(status)}
-                  className={`cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors ${
-                    selectedStatus === status ? "bg-primary/10" : ""
+                  className={`item-white-gradient cursor-pointer text-xs font-medium rounded-md ${
+                    selectedStatus === status ? 'ring-1 ring-[#FF8E1A]' : ''
                   }`}
                 >
                   {status}
@@ -147,12 +159,12 @@ export function NewBookingsFeed() {
         <table className="w-full">
           <thead className="sticky top-0 z-10 bg-card backdrop-blur-sm">
             <tr className="border-b border-border">
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Artist Name</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Client Name</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Booking Type</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Style</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Date & Time</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Status</th>
+              <th className="text-left text-xs font-bold text-foreground px-4 py-3 bg-card">Artist Name</th>
+              <th className="text-left text-xs font-bold text-foreground px-4 py-3 bg-card">Client Name</th>
+              <th className="text-left text-xs font-bold text-foreground px-4 py-3 bg-card">Booking Type</th>
+              <th className="text-left text-xs font-bold text-foreground px-4 py-3 bg-card">Style</th>
+              <th className="text-left text-xs font-bold text-foreground px-4 py-3 bg-card">Date & Time</th>
+              <th className="text-left text-xs font-bold text-foreground px-4 py-3 bg-card">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -165,6 +177,9 @@ export function NewBookingsFeed() {
                 <td className="px-4 py-3 bg-card">
                   <div className="flex items-center gap-2">
                     <Avatar className="w-8 h-8">
+                      {booking.avatar && (
+                        <AvatarImage src={booking.avatar} alt={booking.artist} />
+                      )}
                       <AvatarFallback className="text-xs bg-primary/10 text-primary">
                         {booking.artist.split(" ").map(n => n[0]).join("")}
                       </AvatarFallback>
@@ -175,10 +190,16 @@ export function NewBookingsFeed() {
                 <td className="px-4 py-3 text-sm text-foreground bg-card">{booking.client}</td>
                 <td className="px-4 py-3 text-sm text-muted-foreground bg-card">{booking.type}</td>
                 <td className="px-4 py-3 text-sm text-muted-foreground bg-card">{booking.style}</td>
-                <td className="px-4 py-3 bg-card">
-                  <div className="text-sm">
-                    <div className="text-foreground">{booking.date}</div>
-                    <div className="text-xs text-muted-foreground">{booking.time}</div>
+                <td className="px-4 py-3 bg-card w-[180px] align-top">
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2 text-[11px] font-semibold text-foreground leading-tight whitespace-nowrap">
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-primary/10 text-[11px] text-primary shrink-0">📅</span>
+                      <span className="whitespace-nowrap">{format(new Date(booking.date), 'EEE, MMM dd, yyyy')}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground leading-tight whitespace-nowrap">
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-muted text-[11px] shrink-0">⏰</span>
+                      <span className="whitespace-nowrap">{normalizeRange(booking.time)}</span>
+                    </div>
                   </div>
                 </td>
                 <td className="px-4 py-3 bg-card">

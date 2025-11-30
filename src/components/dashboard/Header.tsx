@@ -4,47 +4,48 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Header() {
   return (
-    <header className="h-24 bg-card border-b border-border px-8 flex items-center justify-between">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Dashboard Overview</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Get a quick snapshot of your shop's performance — bookings, payments — all in one place.
-        </p>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" className="text-sm">
-          <Users className="w-4 h-4 mr-2" />
-          Invite Staff
-        </Button>
-        <Button variant="ghost" size="sm" className="text-sm">
-          <LinkIcon className="w-4 h-4 mr-2" />
-          Booking Link
-        </Button>
-        <Button variant="ghost" size="sm" className="text-sm">
-          <Eye className="w-4 h-4 mr-2" />
-          View All Requests
-        </Button>
-        <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-          <Plus className="w-4 h-4 mr-2" />
-          New Booking
-        </Button>
-        
-        <div className="w-px h-8 bg-border mx-2" />
-        
-        <Button variant="ghost" size="icon" className="relative">
+    <header className="bg-[#F8F8F8] border-b border-border px-8 py-5 flex flex-col gap-3">
+      {/* Top row: right-aligned notifications + profile */}
+      <div className="flex items-center justify-end gap-3">
+        <Button
+          aria-label="Notifications"
+          variant="ghost"
+          size="icon"
+          className="relative rounded-full border hover:bg-muted"
+        >
           <Bell className="w-5 h-5" />
         </Button>
+        <Avatar className="w-11 h-11 ring-2 ring-primary/25">
+          <AvatarImage src="/avatars/human-ethan.svg" />
+          <AvatarFallback className="bg-gradient-to-br from-[#FF7A18] via-[#FF8E1A] to-[#FFB347] text-white">HC</AvatarFallback>
+        </Avatar>
+        <div className="text-sm leading-tight text-right">
+          <div className="font-semibold text-foreground">Kiran Teja</div>
+          <div className="text-xs text-muted-foreground">kiranlanke824@gmail.com</div>
+        </div>
+      </div>
 
-        <div className="flex items-center gap-3 ml-2">
-          <Avatar className="w-10 h-10">
-            <AvatarImage src="" />
-            <AvatarFallback className="bg-primary text-primary-foreground">HC</AvatarFallback>
-          </Avatar>
-          <div className="text-sm">
-            <div className="font-medium text-foreground">Hanna Colzoni</div>
-            <div className="text-xs text-muted-foreground">hannacolzoni@gmail.com</div>
-          </div>
+      {/* Second row: heading + description left, action buttons right */}
+      <div className="flex items-center justify-between gap-6">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">Dashboard Overview</h1>
+          <p className="text-sm text-muted-foreground mt-0.5 max-w-xl">
+            Get a quick snapshot of your shop's performance — bookings, payments — all in one place.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+          <Button variant="secondary" size="sm" className="font-medium rounded-full shadow-sm bg-white hover:bg-muted transition-colors border border-neutral-200 dark:border-neutral-700">
+            <Users className="w-4 h-4 mr-1" /> Invite Staff
+          </Button>
+          <Button variant="secondary" size="sm" className="font-medium rounded-full shadow-sm bg-white hover:bg-muted transition-colors border border-neutral-200 dark:border-neutral-700">
+            <LinkIcon className="w-4 h-4 mr-1" /> Booking Link
+          </Button>
+          <Button variant="secondary" size="sm" className="font-medium rounded-full shadow-sm bg-white hover:bg-muted transition-colors border border-neutral-200 dark:border-neutral-700">
+            <Eye className="w-4 h-4 mr-1" /> View Requests
+          </Button>
+          <Button size="sm" className="btn-white-to-gradient font-semibold rounded-full shadow-md">
+            <Plus className="w-4 h-4 mr-1" /> New Booking
+          </Button>
         </div>
       </div>
     </header>

@@ -109,7 +109,7 @@ export function TopArtistsBar() {
           <h3 className="text-lg font-semibold text-foreground">Top Artists</h3>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="text-sm hover:bg-primary hover:text-primary-foreground transition-colors">
+              <Button variant="outline" size="sm" className="btn-white-gradient font-medium rounded-full shadow-sm">
                 {selectedMonth}
                 <ChevronDown className="w-4 h-4 ml-2" />
               </Button>
@@ -119,8 +119,8 @@ export function TopArtistsBar() {
                 <DropdownMenuItem
                   key={month}
                   onClick={() => setSelectedMonth(month)}
-                  className={`cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors ${
-                    selectedMonth === month ? "bg-primary/10" : ""
+                  className={`item-white-gradient cursor-pointer rounded-md text-sm font-medium ${
+                    selectedMonth === month ? 'ring-1 ring-[#FF8E1A]' : ''
                   }`}
                 >
                   {month}
@@ -155,25 +155,36 @@ export function TopArtistsBar() {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(var(--foreground))",
-                border: "none",
+                backgroundColor: "#ffffff",
+                border: "1px solid #f1f1f1",
                 borderRadius: "8px",
-                padding: "8px 12px",
-                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                padding: "6px 10px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.06)",
               }}
-              labelStyle={{ color: "hsl(var(--background))", fontWeight: 600, fontSize: "14px" }}
-              itemStyle={{ color: "hsl(var(--background))" }}
+              labelStyle={{ color: "#111", fontWeight: 600, fontSize: "13px" }}
+              itemStyle={{ color: "#333" }}
+              cursor={{ stroke: "#FF8E1A", strokeWidth: 1 }}
               formatter={(value: number) => [`${value}`, "Appointments"]}
             />
+            <defs>
+              {/* Hover gradient matches Bookings card theme */}
+              <linearGradient id="barGradientHover" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#FF7A18" />
+                <stop offset="60%" stopColor="#FF8E1A" />
+                <stop offset="100%" stopColor="#FFB347" />
+              </linearGradient>
+            </defs>
             <Bar
               dataKey="appointments"
-              radius={[8, 8, 0, 0]}
+              radius={[18, 18, 18, 18]}
               maxBarSize={60}
             >
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={hoveredIndex === index ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.8)"}
+                  fill={hoveredIndex === index ? "url(#barGradientHover)" : "#FFF5EE"}
+                  stroke={hoveredIndex === index ? "#FF8E1A" : "none"}
+                  strokeWidth={hoveredIndex === index ? 2 : 0}
                   className="transition-all duration-200"
                 />
               ))}
