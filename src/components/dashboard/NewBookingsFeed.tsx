@@ -3,8 +3,15 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
-const bookings = [
+const allBookings = [
   {
     artist: "Ayra Voss",
     client: "Martin Torff",
@@ -65,6 +72,26 @@ const bookings = [
     status: "Repeat",
     statusColor: "success",
   },
+  {
+    artist: "Clara Jensen",
+    client: "Jane Smith",
+    type: "Flash",
+    style: "Minimalist",
+    date: "Sun Aug 25 2025",
+    time: "1:00 – 3:00 PM",
+    status: "New",
+    statusColor: "info",
+  },
+  {
+    artist: "Sophie Langley",
+    client: "Michael Brown",
+    type: "Tattoo Session",
+    style: "Traditional",
+    date: "Mon Aug 26 2025",
+    time: "9:00 AM – 12:00 PM",
+    status: "Cancelled",
+    statusColor: "muted",
+  },
 ];
 
 const getStatusVariant = (color: string) => {
@@ -74,39 +101,68 @@ const getStatusVariant = (color: string) => {
     warning: "bg-warning/10 text-warning hover:bg-warning/20",
     purple: "bg-purple/10 text-purple hover:bg-purple/20",
     teal: "bg-teal/10 text-teal hover:bg-teal/20",
+    muted: "bg-muted text-muted-foreground hover:bg-muted/80",
   };
   return variants[color] || "";
 };
 
 export function NewBookingsFeed() {
+  const [selectedStatus, setSelectedStatus] = useState("All Status");
+  const statuses = ["All Status", "New", "Repeat", "Deposit", "Check-in", "Upcoming", "Cancelled"];
+  
+  const bookings = selectedStatus === "All Status" 
+    ? allBookings 
+    : allBookings.filter(b => b.status === selectedStatus);
+
   return (
-    <Card className="bg-card border border-border shadow-sm">
+    <Card className="bg-card border border-border shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-in">
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-foreground">New Bookings Feed</h3>
-          <Button variant="outline" size="sm" className="text-xs">
-            All Status
-            <ChevronDown className="w-3 h-3 ml-2" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors">
+                {selectedStatus}
+                <ChevronDown className="w-3 h-3 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-card border border-border z-50 shadow-lg">
+              {statuses.map((status) => (
+                <DropdownMenuItem
+                  key={status}
+                  onClick={() => setSelectedStatus(status)}
+                  className={`cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors ${
+                    selectedStatus === status ? "bg-primary/10" : ""
+                  }`}
+                >
+                  {status}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      <div className="overflow-auto max-h-[420px]">
+      <div className="overflow-auto max-h-[420px] scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
         <table className="w-full">
-          <thead className="bg-muted/50 sticky top-0">
-            <tr>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3">Artist Name</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3">Client Name</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3">Booking Type</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3">Style</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3">Date & Time</th>
-              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3">Status</th>
+          <thead className="sticky top-0 z-10 bg-card backdrop-blur-sm">
+            <tr className="border-b border-border">
+              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Artist Name</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Client Name</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Booking Type</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Style</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Date & Time</th>
+              <th className="text-left text-xs font-semibold text-muted-foreground px-4 py-3 bg-card">Status</th>
             </tr>
           </thead>
           <tbody>
             {bookings.map((booking, index) => (
-              <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                <td className="px-4 py-3">
+              <tr 
+                key={index} 
+                className="border-b border-border/50 hover:bg-muted/30 transition-colors animate-fade-in"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <td className="px-4 py-3 bg-card">
                   <div className="flex items-center gap-2">
                     <Avatar className="w-8 h-8">
                       <AvatarFallback className="text-xs bg-primary/10 text-primary">
@@ -116,16 +172,16 @@ export function NewBookingsFeed() {
                     <span className="text-sm text-foreground">{booking.artist}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm text-foreground">{booking.client}</td>
-                <td className="px-4 py-3 text-sm text-muted-foreground">{booking.type}</td>
-                <td className="px-4 py-3 text-sm text-muted-foreground">{booking.style}</td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 text-sm text-foreground bg-card">{booking.client}</td>
+                <td className="px-4 py-3 text-sm text-muted-foreground bg-card">{booking.type}</td>
+                <td className="px-4 py-3 text-sm text-muted-foreground bg-card">{booking.style}</td>
+                <td className="px-4 py-3 bg-card">
                   <div className="text-sm">
                     <div className="text-foreground">{booking.date}</div>
                     <div className="text-xs text-muted-foreground">{booking.time}</div>
                   </div>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 bg-card">
                   <Badge className={`text-xs font-semibold ${getStatusVariant(booking.statusColor)}`}>
                     {booking.status}
                   </Badge>

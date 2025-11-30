@@ -2,28 +2,132 @@ import { Card } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Label } from "recharts";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 
-const data = [
-  { name: "Sophie Langley", value: 45, color: "hsl(14, 100%, 60%)" },
-  { name: "Luca Moretti", value: 20, color: "hsl(20, 100%, 65%)" },
-  { name: "Ayra Voss", value: 17, color: "hsl(25, 95%, 70%)" },
-  { name: "Ethan", value: 9, color: "hsl(30, 90%, 75%)" },
-  { name: "Clara Jensen", value: 5, color: "hsl(35, 85%, 80%)" },
-];
+const monthlyData: Record<string, Array<{ name: string; value: number; color: string }>> = {
+  January: [
+    { name: "Sophie Langley", value: 42, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 22, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 18, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 11, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 7, color: "hsl(35, 85%, 80%)" },
+  ],
+  February: [
+    { name: "Sophie Langley", value: 44, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 21, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 16, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 12, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 7, color: "hsl(35, 85%, 80%)" },
+  ],
+  March: [
+    { name: "Sophie Langley", value: 46, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 23, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 15, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 10, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 6, color: "hsl(35, 85%, 80%)" },
+  ],
+  April: [
+    { name: "Sophie Langley", value: 43, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 21, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 17, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 13, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 6, color: "hsl(35, 85%, 80%)" },
+  ],
+  May: [
+    { name: "Sophie Langley", value: 45, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 22, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 16, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 11, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 6, color: "hsl(35, 85%, 80%)" },
+  ],
+  June: [
+    { name: "Sophie Langley", value: 47, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 24, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 14, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 9, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 6, color: "hsl(35, 85%, 80%)" },
+  ],
+  July: [
+    { name: "Sophie Langley", value: 41, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 20, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 19, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 12, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 8, color: "hsl(35, 85%, 80%)" },
+  ],
+  August: [
+    { name: "Sophie Langley", value: 44, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 21, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 17, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 11, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 7, color: "hsl(35, 85%, 80%)" },
+  ],
+  September: [
+    { name: "Sophie Langley", value: 46, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 22, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 16, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 10, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 6, color: "hsl(35, 85%, 80%)" },
+  ],
+  October: [
+    { name: "Sophie Langley", value: 40, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 19, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 18, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 14, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 9, color: "hsl(35, 85%, 80%)" },
+  ],
+  November: [
+    { name: "Sophie Langley", value: 43, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 20, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 17, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 13, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 7, color: "hsl(35, 85%, 80%)" },
+  ],
+  December: [
+    { name: "Sophie Langley", value: 45, color: "hsl(14, 100%, 60%)" },
+    { name: "Luca Moretti", value: 20, color: "hsl(20, 100%, 65%)" },
+    { name: "Ayra Voss", value: 17, color: "hsl(25, 95%, 70%)" },
+    { name: "Ethan", value: 9, color: "hsl(30, 90%, 75%)" },
+    { name: "Clara Jensen", value: 5, color: "hsl(35, 85%, 80%)" },
+  ],
+};
 
 export function TopArtistsPie() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState("December");
+  const data = monthlyData[selectedMonth];
 
   return (
     <Card className="bg-card border border-border shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-in">
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-foreground">Top Artists</h3>
-          <Button variant="outline" size="sm" className="text-sm hover:bg-primary hover:text-primary-foreground transition-colors">
-            December
-            <ChevronDown className="w-4 h-4 ml-2" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="text-sm hover:bg-primary hover:text-primary-foreground transition-colors">
+                {selectedMonth}
+                <ChevronDown className="w-4 h-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-card border border-border z-50 shadow-lg">
+              {Object.keys(monthlyData).map((month) => (
+                <DropdownMenuItem
+                  key={month}
+                  onClick={() => setSelectedMonth(month)}
+                  className={`cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors ${
+                    selectedMonth === month ? "bg-primary/10" : ""
+                  }`}
+                >
+                  {month}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <ResponsiveContainer width="100%" height={220}>
