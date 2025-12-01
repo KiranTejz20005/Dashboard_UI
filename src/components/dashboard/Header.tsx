@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Header() {
   return (
-    <header className="bg-[#F8F8F8] border-b border-border px-8 py-5 flex flex-col gap-3">
+    <header className="bg-[#F8F8F8] border-b border-border px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex flex-col gap-3">
       {/* Top row: right-aligned notifications + profile */}
       <div className="flex items-center justify-end gap-3">
         <Button

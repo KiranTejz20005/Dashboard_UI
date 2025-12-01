@@ -13,7 +13,7 @@ const Index = () => {
     <div className="min-h-screen bg-background w-full">
       <Sidebar />
       
-      <div className="ml-20 w-[calc(100%-80px)]">
+      <div className="w-full md:ml-20 md:w-[calc(100%-80px)]">
         <Header />
         
         <main className="p-6">

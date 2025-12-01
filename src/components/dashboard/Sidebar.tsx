@@ -19,10 +19,10 @@ export function Sidebar() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-20 bg-[#FAFAFA] border-r border-neutral-200 flex flex-col items-center py-6 z-50">
+    <aside className="hidden md:flex fixed left-0 top-0 h-screen w-20 bg-[#FAFAFA] border-r border-neutral-200 md:flex-col items-center py-6 z-50">
       {/* Logo block */}
       <div className="w-11 h-11 rounded-xl mb-7 gradient-bookings flex items-center justify-center shadow-sm">
-        <img src="/logo.svg" alt="Logo" className="w-6 h-6" />
+        <Grid2x2 className="w-6 h-6 text-white" />
       </div>
 
       {/* Main navigation */}
